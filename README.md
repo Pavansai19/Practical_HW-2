@@ -1,59 +1,68 @@
 Practical Homework 2 — Support Vector Machines (SVM)
 
-📖 Overview
+ Overview
 
-In this project, we explored Support Vector Machines (SVMs) to predict the likelihood of diabetes among adults using the 2022 NHIS dataset.
-We handled real-world messy data, made modeling decisions based on critical thinking, and designed our workflow to mimic a real data science project — focusing not just on performance, but clarity and correctness.
+In this project, we explored Support Vector Machines (SVMs) to predict the likelihood of diabetes among adults using the 2022 NHIS dataset. We focused on clean modeling practices: handling real-world messy data, identifying the most predictive features, and tuning models to balance performance and fairness. Our workflow was structured to mirror how data science is done in real-world projects.
 
 ⸻
 
- Methodology
+Methodology
 
 1. Data Preparation
 	•	Loaded the NHIS 2022 dataset.
 	•	Replaced special codes (996, 997, 998, 999) with NA.
-	•	Focused only on adults (Age ≥ 18) with valid diabetes history (Yes/No responses).
-	•	Selected an initial set of health and lifestyle variables (e.g., Age, BMI, Sleep, Fruit intake, Soda consumption).
+	•	Filtered for adults (Age ≥ 18) with valid diabetes responses (Yes/No).
+	•	Selected initial health and lifestyle variables: Age, BMI, Sleep, Exercise, Diet, Alcohol, etc.
 
 2. Initial Modeling
-	•	Trained a basic Linear SVM to check feasibility.
-	•	Observed significant class imbalance (“Yes” class was much smaller), impacting model performance.
-	•	Realized that some variables had low impact on prediction.
+	•	Trained a basic Linear SVM on full data.
+	•	Identified heavy class imbalance (very few “Yes” cases).
+	•	Saw that several features had little to no predictive value.
 
-3. Feature Importance
-	•	Extracted feature importance from the basic Linear SVM.
-	•	Selected top 6 most influential features (Age, BMI, Alcohol Days, Moderate Exercise, Pizza Intake, Soda Intake) to focus modeling efforts.
+3. Feature Selection
+	•	Used linear SVM-based feature importance to select top 6 variables:
+	•	Age, BMI, Alcohol Days, Moderate Exercise, Pizza Intake, Soda Intake.
 
 4. Improved Modeling
-	•	Added class weights to give more importance to minority class (“Yes” for diabetes).
-	•	Retrained:
-	•	Linear SVM (weighted + reduced features)
-	•	Radial SVM (weighted)
-	•	Polynomial SVM (weighted)
+	•	Added class weights to give more influence to the minority (“Yes”) class.
+	•	Re-trained 3 weighted SVM models:
+	•	Linear SVM
+	•	Radial SVM
+	•	Polynomial SVM
 
-5. Tuning and Evaluation
-	•	Performed hyperparameter tuning on each model (cost, gamma, degree).
-	•	Evaluated using Accuracy, Precision, Recall, and F1 Score.
-	•	Created mini datasets (AGE vs BMICALC) to plot decision boundaries for clear visualization.
+5. Mini Dataset + Tuning
+	•	Created a balanced mini dataset (500 Yes, 500 No).
+	•	Applied hyperparameter tuning (cost, degree) on the polynomial model.
+	•	Tuned Polynomial SVM on this 1000-sample dataset gave:
+	•	Accuracy: 66.3%
+	•	Recall: 87.3%
+	•	Precision: 61.5%
+	•	F1 Score: 72.3%
+	•	Confusion matrix showed strong performance on positive detection (recall) with moderate false positives.
 
 ⸻
- Key Learnings
-	•	Simply achieving high accuracy without considering class imbalance can be misleading.
-	•	Feature selection based on importance simplified the models without major loss in performance.
-	•	Radial SVM handled non-linear boundaries better than Linear SVM.
-	•	Polynomial SVM struggled due to sensitivity to outliers and low generalization.
-	•	Visualization of decision boundaries helped intuitively understand model behavior.
 
- Thought Process and Decisions
-	•	Instead of blindly using all available features, we analyzed importance to reduce noise and complexity.
-	•	Introduced class weights only after initial experiments showed clear imbalance issues.
-	•	Focused on clean, interpretable plots (decision boundaries) using mini-datasets.
-	•	Avoided overfitting by not making hyperparameter grids too complex.
-	•	Took multiple iterations to fix errors — ensuring logical progression rather than shortcutting.
+Key Learnings
+	•	High accuracy can be misleading in imbalanced datasets — recall and F1-score matter more.
+	•	Reducing features based on importance simplified models without losing much performance.
+	•	Untuned polynomial SVMs performed poorly despite high accuracy due to zero recall.
+	•	The tuned polynomial SVM on a mini dataset was the most balanced and effective.
+	•	Confusion matrix heatmaps and performance plots helped visualize model strengths and trade-offs.
 
- References
+⸻
+
+Thought Process & Decisions
+	•	Prioritized interpretability over complexity in both modeling and tuning.
+	•	Used class weights only after observing how imbalance affected early results.
+	•	Focused on recall due to the real-world importance of identifying diabetic individuals.
+	•	Balanced simplicity and performance by tuning on a smaller, well-structured dataset.
+	•	Iterated based on feedback, improving our final results and presentation clarity.
+
+⸻
+
+References
 	1.	Cortes, C., & Vapnik, V. (1995). Support-vector networks. Machine Learning.
-	2.	American Diabetes Association. (2022). Standards of Medical Care in Diabetes—2022.
-	3.	James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An Introduction to Statistical Learning (2nd ed.). Springer.
-	4.	ChatGPT (2025). Helped troubleshoot errors, debug data flow, and generate initial background illustrations. OpenAI ChatGPT.
-	5.	U.S. National Health Interview Survey (NHIS) 2022. Dataset Access.
+	2.	American Diabetes Association (2022). Standards of Medical Care in Diabetes—2022.
+	3.	James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An Introduction to Statistical Learning (2nd ed.).
+	4.	NHIS Dataset — U.S. National Health Interview Survey, 2022.
+	5.	OpenAI ChatGPT (2025) — Assisted with debugging, tuning strategy, and data visualization design.
